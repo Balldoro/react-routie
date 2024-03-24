@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from 'constants';
 
 interface State {
   currentPath: string;
@@ -20,10 +21,12 @@ export const RouterContextProvider = ({
       setCurrentPath(location.pathname);
     };
 
-    window.addEventListener('popstate', handleRouteChange);
+    window.addEventListener(ROUTE_CHANGE_EVENT, handleRouteChange);
+    window.addEventListener(POP_STATE_EVENT, handleRouteChange);
 
     return () => {
-      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener(ROUTE_CHANGE_EVENT, handleRouteChange);
+      window.removeEventListener(POP_STATE_EVENT, handleRouteChange);
     };
   }, []);
 
