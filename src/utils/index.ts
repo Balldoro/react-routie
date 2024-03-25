@@ -1,5 +1,10 @@
 import { ROUTE_CHANGE_EVENT } from 'constants';
 
+const clearSlashUrl = (path: string) =>
+  path === '/' ? path : path.replace(/\/$/, '');
+
+export const getClearPathname = () => clearSlashUrl(location.pathname);
+
 interface ChangeRouteConfig {
   replace?: boolean;
 }

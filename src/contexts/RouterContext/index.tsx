@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from 'constants';
+import { getClearPathname } from 'utils';
 
 interface State {
   currentPath: string;
@@ -14,11 +15,11 @@ interface RouterContextProviderProps {
 export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
-  const [currentPath, setCurrentPath] = React.useState(location.pathname);
+  const [currentPath, setCurrentPath] = React.useState(getClearPathname());
 
   React.useEffect(() => {
     const handleRouteChange = () => {
-      setCurrentPath(location.pathname);
+      setCurrentPath(getClearPathname());
     };
 
     window.addEventListener(ROUTE_CHANGE_EVENT, handleRouteChange);
