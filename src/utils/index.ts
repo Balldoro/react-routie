@@ -9,16 +9,19 @@ export const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
     const item = children[i];
     if (React.isValidElement(item)) {
       const { path, children } = item.props;
+      const fullPath = `${parentPath}${path}`;
+
       allChildren.push(
         React.cloneElement(item, {
           //@ts-expect-error Fix Item type definition
-          path: `${parentPath}${path}`,
+          path: fullPath,
           parentPath,
         }),
       );
 
       if (children) {
-        allChildren.push(...flattenRoutes(children, path));
+        const childrenArray = [].concat(children);
+        allChildren.push(...flattenRoutes(childrenArray, fullPath));
       }
     }
   }
