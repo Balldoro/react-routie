@@ -6,12 +6,21 @@ interface LinkProps
     HTMLAnchorElement
   > {
   path: string;
+  replace?: boolean;
 }
 
-export const Link = ({ path, children, onClick, ...props }: LinkProps) => {
+export const Link = ({
+  path,
+  replace = false,
+  children,
+  onClick,
+  ...props
+}: LinkProps) => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    history.pushState({ url: path }, '', path);
+    replace
+      ? history.replaceState({ url: path }, '', path)
+      : history.pushState({ url: path }, '', path);
 
     const routeChangeEvent = new Event('routechange');
     dispatchEvent(routeChangeEvent);
