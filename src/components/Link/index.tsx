@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { changeRoute } from 'utils';
 
 interface LinkProps
   extends React.DetailedHTMLProps<
@@ -18,14 +19,8 @@ export const Link = ({
 }: LinkProps) => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    replace
-      ? history.replaceState({ url: path }, '', path)
-      : history.pushState({ url: path }, '', path);
-
-    const routeChangeEvent = new Event('routechange');
-    dispatchEvent(routeChangeEvent);
-
     onClick?.(e);
+    changeRoute(path, { replace });
   };
 
   return (
