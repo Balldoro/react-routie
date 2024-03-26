@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
 import { ROUTE_CHANGE_EVENT } from 'constants';
-import { ChangeRouteConfig, RouteProps, RoutePropsWithChildren } from 'types';
+import { ChangeRouteConfig, RoutePropsWithChildren } from 'types';
 
 const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
   const allChildren: React.ReactElement<RoutePropsWithChildren>[] = [];
 
   for (let i = 0, length = children.length; i < length; i++) {
     const item = children[i];
-    if (React.isValidElement<RouteProps | RoutePropsWithChildren>(item)) {
-      const { path } = item.props;
+    if (React.isValidElement<RoutePropsWithChildren>(item)) {
+      const { path, children: nestedChildren } = item.props;
       const fullPath = mergePaths(parentPath, path);
 
       allChildren.push(
         React.cloneElement(item, { path: fullPath, parentPath }),
       );
 
-      if (children) {
+      if (nestedChildren) {
         // Empty array casting to overwrite infered never[] type
-        const childrenArray = ([] as React.ReactNode[]).concat(children);
+        const childrenArray = ([] as React.ReactNode[]).concat(nestedChildren);
         allChildren.push(...flattenRoutes(childrenArray, path));
       }
     }
