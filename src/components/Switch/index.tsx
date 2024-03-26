@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useRouter } from 'contexts';
-import { findRoute, flattenRoutes } from 'utils';
+import { renderMatchingRoute } from 'utils';
+import { RouteContextProvider, useRouter } from 'contexts';
 
 interface SwitchProps {
   children:
@@ -11,12 +11,9 @@ interface SwitchProps {
 export const Switch = ({ children }: SwitchProps) => {
   const { currentPath } = useRouter();
 
-  const childrenArray = React.Children.toArray(children);
-  const flatChildren = flattenRoutes(childrenArray);
-
-  const routeToRender = flatChildren.find((c) =>
-    findRoute(c.props.path, currentPath),
+  return (
+    <RouteContextProvider>
+      {renderMatchingRoute(children, currentPath)}
+    </RouteContextProvider>
   );
-
-  return routeToRender;
 };
