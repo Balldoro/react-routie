@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { changeRoute } from 'utils';
+import { useNavigate } from 'hooks';
 
 interface LinkProps
   extends React.DetailedHTMLProps<
@@ -17,10 +17,12 @@ export const Link = ({
   onClick,
   ...props
 }: LinkProps) => {
+  const navigate = useNavigate();
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     onClick?.(e);
-    changeRoute(path, { replace });
+    navigate(path, { replace });
   };
 
   return (

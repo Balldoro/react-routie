@@ -7,7 +7,3 @@ export interface RouteProps {
 export interface RoutePropsWithChildren extends RouteProps {
   children?: React.ReactNode;
 }
-
-export interface ChangeRouteConfig {
-  replace?: boolean;
-}
