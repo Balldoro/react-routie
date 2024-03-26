@@ -16,7 +16,6 @@ interface RouteContextProviderProps {
 export const RouteContextProvider = ({
   children,
 }: RouteContextProviderProps) => {
-  console.log('context');
   if (React.isValidElement(children)) {
     const { parentPath, path, children: nestedChildren } = children.props;
     const fullPath = mergePaths(parentPath, path);
