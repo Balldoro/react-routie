@@ -7,3 +7,5 @@ export interface RouteProps {
 export interface RoutePropsWithChildren extends RouteProps {
   children?: React.ReactNode;
 }
+
+export type RouteListenersEvent = CustomEvent<{ url: string }> | PopStateEvent;

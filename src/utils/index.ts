@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
-import { ROUTE_CHANGE_EVENT } from 'constants';
-import { RoutePropsWithChildren } from 'types';
+import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from 'constants';
+import { RouteListenersEvent, RoutePropsWithChildren } from 'types';
 
 const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
   const allChildren: React.ReactElement<RoutePropsWithChildren>[] = [];
@@ -58,4 +58,16 @@ export const mergePaths = (...paths: string[]) => paths.join('');
 export const createRouteChangeEvent = () => {
   const routeChangeEvent = new Event(ROUTE_CHANGE_EVENT);
   dispatchEvent(routeChangeEvent);
+};
+
+export const setupListeners = (
+  handleListener: (e: RouteListenersEvent) => void,
+) => {
+  window.addEventListener(ROUTE_CHANGE_EVENT, handleListener);
+  window.addEventListener(POP_STATE_EVENT, handleListener);
+
+  return () => {
+    window.removeEventListener(ROUTE_CHANGE_EVENT, handleListener);
+    window.removeEventListener(POP_STATE_EVENT, handleListener);
+  };
 };
