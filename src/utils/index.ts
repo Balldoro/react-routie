@@ -1,34 +1,51 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
 import { ROUTE_CHANGE_EVENT } from 'constants';
+import { ChangeRouteConfig, RouteProps, RoutePropsWithChildren } from 'types';
 
-export const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
-  const allChildren: React.ReactElement[] = [];
+const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
+  const allChildren: React.ReactElement<RoutePropsWithChildren>[] = [];
 
   for (let i = 0, length = children.length; i < length; i++) {
     const item = children[i];
-    if (React.isValidElement(item)) {
-      const { path, children } = item.props;
-      const fullPath = `${parentPath}${path}`;
+    if (React.isValidElement<RouteProps | RoutePropsWithChildren>(item)) {
+      const { path } = item.props;
+      const fullPath = mergePaths(parentPath, path);
 
       allChildren.push(
-        React.cloneElement(item, {
-          //@ts-expect-error Fix Item type definition
-          path: fullPath,
-          parentPath,
-        }),
+        React.cloneElement(item, { path: fullPath, parentPath }),
       );
 
       if (children) {
-        const childrenArray = [].concat(children);
-        allChildren.push(...flattenRoutes(childrenArray, fullPath));
+        // Empty array casting to overwrite infered never[] type
+        const childrenArray = ([] as React.ReactNode[]).concat(children);
+        allChildren.push(...flattenRoutes(childrenArray, path));
       }
     }
   }
   return allChildren;
 };
 
-export const findRoute = (path: string, currentPath: string, loose = false) =>
+export const renderMatchingRoute = (
+  children: React.ReactNode,
+  currentPath: string,
+  parentPath = '',
+) => {
+  const childrenArray = React.Children.toArray(children);
+  const flatChildren = flattenRoutes(childrenArray);
+
+  const routeToRender = flatChildren.find(({ props }) =>
+    findRoute(mergePaths(parentPath, props.path), currentPath),
+  );
+
+  const routeParentPath = routeToRender?.props.parentPath;
+
+  return routeParentPath
+    ? flatChildren.find(({ props }) => findRoute(props.path, routeParentPath))
+    : routeToRender;
+};
+
+const findRoute = (path: string, currentPath: string, loose = false) =>
   parse(path, loose).pattern.exec(currentPath);
 
 export const clearSlashUrl = (path: string) =>
@@ -36,9 +53,7 @@ export const clearSlashUrl = (path: string) =>
 
 export const getClearPathname = () => clearSlashUrl(location.pathname);
 
-interface ChangeRouteConfig {
-  replace?: boolean;
-}
+export const mergePaths = (...paths: string[]) => paths.join('');
 
 export const changeRoute = (path: string, config?: ChangeRouteConfig) => {
   config?.replace
