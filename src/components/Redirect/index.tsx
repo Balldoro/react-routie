@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { changeRoute } from 'utils';
+import { useNavigate } from 'hooks';
 
 interface RedirectProps {
   path: string;
@@ -7,9 +7,11 @@ interface RedirectProps {
 }
 
 export const Redirect = ({ path, replace = false }: RedirectProps) => {
+  const navigate = useNavigate();
+
   React.useEffect(() => {
-    changeRoute(path, { replace });
-  }, [path, replace]);
+    navigate(path, { replace });
+  }, [path, navigate, replace]);
 
   return null;
 };

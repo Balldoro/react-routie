@@ -8,6 +8,4 @@ export interface RoutePropsWithChildren extends RouteProps {
   children?: React.ReactNode;
 }
 
-export interface ChangeRouteConfig {
-  replace?: boolean;
-}
+export type RouteListenersEvent = CustomEvent<{ url: string }> | PopStateEvent;
