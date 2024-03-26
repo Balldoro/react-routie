@@ -1,12 +1,5 @@
-import * as React from 'react';
+import { RoutePropsWithChildren } from 'types';
 
-export interface RouteProps {
-  path: string;
-  parentPath: string;
-  page: React.ReactNode;
-  children: React.ReactElement<{ parentPath: string }>;
-}
-
-export const Route = ({ page }: RouteProps) => {
+export const Route = ({ page }: RoutePropsWithChildren) => {
   return page;
 };
