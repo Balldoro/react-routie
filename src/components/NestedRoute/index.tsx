@@ -4,9 +4,9 @@ import { useRouter, RouteContextProvider, useRoute } from 'contexts';
 
 export const NestedRoute = () => {
   const { currentPath } = useRouter();
-  const { children, fullPath, path } = useRoute();
+  const { children, fullRoutePath, path } = useRoute();
 
-  const nestedRoute = renderMatchingRoute(children, currentPath, fullPath);
+  const nestedRoute = renderMatchingRoute(children, currentPath, fullRoutePath);
 
   return nestedRoute ? (
     <RouteContextProvider>
