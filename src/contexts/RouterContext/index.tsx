@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getClearPathname, mergePaths, setupListeners } from 'utils';
+import { mergePaths, setupListeners } from 'utils';
 
 interface State {
   currentPath: string;
@@ -16,12 +16,12 @@ interface RouterContextProviderProps {
 export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
-  const [currentPath, setCurrentPath] = React.useState(getClearPathname());
+  const [currentPath, setCurrentPath] = React.useState(location.pathname);
   const [search, setSearch] = React.useState(location.search);
 
   React.useLayoutEffect(() => {
     const handleRouteChange = () => {
-      setCurrentPath(getClearPathname());
+      setCurrentPath(location.pathname);
       setSearch(location.search);
     };
 

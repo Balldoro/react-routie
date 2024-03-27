@@ -35,7 +35,7 @@ export const renderMatchingRoute = (
   const flatChildren = flattenRoutes(childrenArray);
 
   const routeToRender = flatChildren.find(({ props }) =>
-    findRoute(mergePaths(parentPath, props.path), currentPath),
+    findRoute(mergePaths(parentPath, props.path), clearSlashUrl(currentPath)),
   );
 
   const routeParentPath = routeToRender?.props.parentPath;
@@ -48,10 +48,8 @@ export const renderMatchingRoute = (
 const findRoute = (path: string, currentPath: string, loose = false) =>
   parse(path, loose).pattern.exec(currentPath);
 
-export const clearSlashUrl = (path: string) =>
+const clearSlashUrl = (path: string) =>
   path === '/' ? path : path.replace(/\/$/, '');
-
-export const getClearPathname = () => clearSlashUrl(location.pathname);
 
 export const mergePaths = (...paths: string[]) => paths.join('');
 
