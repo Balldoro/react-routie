@@ -3,7 +3,7 @@ import { mergePaths } from 'utils';
 
 interface State {
   children: React.ReactNode;
-  fullPath: string;
+  fullRoutePath: string;
   path: string;
 }
 
@@ -18,9 +18,9 @@ export const RouteContextProvider = ({
 }: RouteContextProviderProps) => {
   if (React.isValidElement(children)) {
     const { parentPath, path, children: nestedChildren } = children.props;
-    const fullPath = mergePaths(parentPath, path);
+    const fullRoutePath = mergePaths(parentPath, path);
 
-    const value = { children: nestedChildren, fullPath, path };
+    const value = { children: nestedChildren, fullRoutePath, path };
 
     return (
       <RouteContext.Provider value={value}>{children}</RouteContext.Provider>
