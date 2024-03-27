@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { getClearPathname, setupListeners } from 'utils';
+import { getClearPathname, mergePaths, setupListeners } from 'utils';
 
 interface State {
   currentPath: string;
+  currentPathWithQuery: string;
+  search: string;
 }
 
 export const RouterContext = React.createContext<State | undefined>(undefined);
@@ -15,10 +17,12 @@ export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
   const [currentPath, setCurrentPath] = React.useState(getClearPathname());
+  const [search, setSearch] = React.useState(location.search);
 
   React.useLayoutEffect(() => {
     const handleRouteChange = () => {
       setCurrentPath(getClearPathname());
+      setSearch(location.search);
     };
 
     const unsubscribe = setupListeners(handleRouteChange);
@@ -26,7 +30,8 @@ export const RouterContextProvider = ({
     return unsubscribe;
   }, []);
 
-  const value = { currentPath };
+  const currentPathWithQuery = mergePaths(currentPath, search);
+  const value = { currentPath, currentPathWithQuery, search };
 
   return (
     <RouterContext.Provider value={value}>{children}</RouterContext.Provider>

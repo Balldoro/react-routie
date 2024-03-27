@@ -6,10 +6,10 @@ interface NavigateConfig {
 }
 
 export const useNavigate = () => {
-  const { currentPath } = useRouter();
+  const { currentPathWithQuery } = useRouter();
 
   const navigate = (path: string, config?: NavigateConfig) => {
-    const shouldReplace = config?.replace || currentPath === path;
+    const shouldReplace = config?.replace || currentPathWithQuery === path;
     const state = { url: path };
 
     shouldReplace

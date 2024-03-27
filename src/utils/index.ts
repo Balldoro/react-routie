@@ -71,3 +71,6 @@ export const setupListeners = (
     window.removeEventListener(POP_STATE_EVENT, handleListener);
   };
 };
+
+export const getSearchParams = (search: string) =>
+  Object.fromEntries(new URLSearchParams(search));
