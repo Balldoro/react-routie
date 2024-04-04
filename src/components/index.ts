@@ -1,8 +1,6 @@
-import { Router } from './Router';
-import { Link } from './Link';
-import { Route } from './Route';
-import { Redirect } from './Redirect';
-import { Switch } from './Switch';
-import { NestedRoute } from './NestedRoute';
-
-export { Link, NestedRoute, Redirect, Route, Router, Switch };
+export { Router } from './Router';
+export { Link } from './Link';
+export { Route } from './Route';
+export { Redirect } from './Redirect';
+export { Switch } from './Switch';
+export { NestedRoute } from './NestedRoute';
