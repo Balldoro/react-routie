@@ -4,6 +4,8 @@
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint src/*.{js,ts,tsx}",
@@ -13,6 +15,14 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
   "keywords": [],
   "author": "Marek Miklaszewski",
   "license": "ISC",

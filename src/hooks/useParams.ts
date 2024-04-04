@@ -1,5 +1,5 @@
 import { parse } from 'regexparam';
-import { useRouter, useRoute } from 'contexts';
+import { useRouter, useRoute } from '../contexts';
 
 interface ParsedRoutePath {
   keys: string[];

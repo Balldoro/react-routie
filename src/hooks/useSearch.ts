@@ -1,4 +1,4 @@
-import { getSearchParams } from 'utils';
+import { getSearchParams } from '../utils';
 import { useRouter } from '../contexts';
 
 export const useSearch = () => {

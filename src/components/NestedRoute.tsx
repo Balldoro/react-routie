@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { renderMatchingRoute } from 'utils';
-import { useRouter, RouteContextProvider, useRoute } from 'contexts';
+import { renderMatchingRoute } from '../utils';
+import { useRouter, RouteContextProvider, useRoute } from '../contexts';
 
 export const NestedRoute = () => {
   const { currentPath } = useRouter();

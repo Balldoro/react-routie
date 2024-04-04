@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mergePaths, setupListeners } from 'utils';
+import { mergePaths, setupListeners } from '../utils';
 
 interface State {
   currentPath: string;

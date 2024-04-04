@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useNavigate } from 'hooks';
-import { useRoute, useRouter } from 'contexts';
-import { mergePaths } from 'utils';
+import { useNavigate } from '../hooks';
+import { useRoute, useRouter } from '../contexts';
+import { mergePaths } from '../utils';
 
 interface StylesProps {
   isActive: boolean;

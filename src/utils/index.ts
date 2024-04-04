@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
-import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from 'constants';
-import { RouteListenersEvent, RoutePropsWithChildren } from 'types';
+import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from '../constants';
+import { RouteListenersEvent, RoutePropsWithParent } from '../types';
 
 const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
-  const allChildren: React.ReactElement<RoutePropsWithChildren>[] = [];
+  const allChildren: React.ReactElement<RoutePropsWithParent>[] = [];
 
   for (let i = 0, length = children.length; i < length; i++) {
     const item = children[i];
-    if (React.isValidElement<RoutePropsWithChildren>(item)) {
+    if (React.isValidElement<RoutePropsWithParent>(item)) {
       const { path, children: nestedChildren } = item.props;
       const fullPath = mergePaths(parentPath, path);
 

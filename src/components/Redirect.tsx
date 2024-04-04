@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'hooks';
+import { useNavigate } from '../hooks';
 
 interface RedirectProps {
   path: string;

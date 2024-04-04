@@ -1,11 +1,11 @@
 export interface RouteProps {
   path: string;
-  parentPath: string;
   page: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export interface RoutePropsWithChildren extends RouteProps {
-  children?: React.ReactNode;
+export interface RoutePropsWithParent extends RouteProps {
+  parentPath?: string;
 }
 
 export type RouteListenersEvent = CustomEvent<{ url: string }> | PopStateEvent;
