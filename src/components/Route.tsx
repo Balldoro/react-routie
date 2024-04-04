@@ -1,5 +1,5 @@
-import { RoutePropsWithChildren } from '../types';
+import { RouteProps } from '../types';
 
-export const Route = ({ page }: RoutePropsWithChildren) => {
+export const Route = ({ page }: RouteProps) => {
   return page;
 };
