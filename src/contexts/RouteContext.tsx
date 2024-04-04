@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mergePaths } from 'utils';
+import { mergePaths } from '../utils';
 
 interface State {
   children: React.ReactNode;

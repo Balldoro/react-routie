@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { renderMatchingRoute } from 'utils';
-import { RouteContextProvider, useRouter } from 'contexts';
+import { renderMatchingRoute } from '../utils';
+import { RouteContextProvider, useRouter } from '../contexts';
 
 interface SwitchProps {
   children:

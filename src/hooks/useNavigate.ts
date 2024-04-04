@@ -1,5 +1,5 @@
-import { useRouter } from 'contexts';
-import { createRouteChangeEvent } from 'utils';
+import { useRouter } from '../contexts';
+import { createRouteChangeEvent } from '../utils';
 
 interface NavigateConfig {
   replace?: boolean;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
-import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from 'constants';
-import { RouteListenersEvent, RoutePropsWithChildren } from 'types';
+import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from '../constants';
+import { RouteListenersEvent, RoutePropsWithChildren } from '../types';
 
 const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
   const allChildren: React.ReactElement<RoutePropsWithChildren>[] = [];

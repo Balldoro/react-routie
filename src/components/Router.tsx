@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouterContextProvider } from 'contexts/RouterContext';
+import { RouterContextProvider } from '../contexts/RouterContext';
 
 interface RouterProps {
   children: React.ReactNode;
