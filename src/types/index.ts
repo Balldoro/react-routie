@@ -8,4 +8,4 @@ export interface RoutePropsWithParent extends RouteProps {
   parentPath?: string;
 }
 
-export type RouteListenersEvent = CustomEvent<{ url: string }> | PopStateEvent;
+export type RouteState = PopStateEventInit['state'];

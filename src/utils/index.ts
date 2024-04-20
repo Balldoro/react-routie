@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { parse } from 'regexparam';
-import { POP_STATE_EVENT, ROUTE_CHANGE_EVENT } from '../constants';
-import { RouteListenersEvent, RoutePropsWithParent } from '../types';
+import { RoutePropsWithParent } from '../types';
 import { Route } from '../components/Route';
 
 const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
@@ -66,21 +65,14 @@ const clearSlashUrl = (path: string) =>
 
 export const mergePaths = (...paths: string[]) => paths.join('');
 
-export const createRouteChangeEvent = () => {
-  const routeChangeEvent = new Event(ROUTE_CHANGE_EVENT);
-  dispatchEvent(routeChangeEvent);
+export const createRouteChangeEvent = (state?: PopStateEventInit['state']) => {
+  dispatchEvent(new PopStateEvent('popstate', { state }));
 };
 
-export const setupListeners = (
-  handleListener: (e: RouteListenersEvent) => void,
-) => {
-  window.addEventListener(ROUTE_CHANGE_EVENT, handleListener);
-  window.addEventListener(POP_STATE_EVENT, handleListener);
+export const setupListeners = (handleListener: (e: PopStateEvent) => void) => {
+  window.addEventListener('popstate', handleListener);
 
-  return () => {
-    window.removeEventListener(ROUTE_CHANGE_EVENT, handleListener);
-    window.removeEventListener(POP_STATE_EVENT, handleListener);
-  };
+  return () => window.removeEventListener('popstate', handleListener);
 };
 
 export const getSearchParams = (search: string) =>

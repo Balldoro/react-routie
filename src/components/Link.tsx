@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useNavigate } from '../hooks';
 import { useRoute, useRouter } from '../contexts';
 import { mergePaths } from '../utils';
+import { RouteState } from '../types';
 
 interface StylesProps {
   isActive: boolean;
@@ -11,6 +12,7 @@ interface LinkProps
   extends Omit<React.ComponentPropsWithRef<'a'>, 'style' | 'className'> {
   path: string;
   replace?: boolean;
+  state?: RouteState;
   style?: React.CSSProperties | ((props: StylesProps) => React.CSSProperties);
   className?: string | ((props: StylesProps) => string);
 }
@@ -18,6 +20,7 @@ interface LinkProps
 export const Link = ({
   path,
   replace = false,
+  state,
   children,
   className,
   style,
@@ -40,7 +43,7 @@ export const Link = ({
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     onClick?.(e);
-    navigate(path, { replace });
+    navigate(path, { replace, state });
   };
 
   return (
