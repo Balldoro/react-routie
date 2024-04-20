@@ -1,11 +1,6 @@
-import { RouteState } from '../types';
 import { useRouter } from '../contexts';
+import { NavigateConfig } from '../types';
 import { createRouteChangeEvent } from '../utils';
-
-interface NavigateConfig {
-  replace?: boolean;
-  state?: RouteState;
-}
 
 export const useNavigate = () => {
   const { currentPathWithQuery } = useRouter();

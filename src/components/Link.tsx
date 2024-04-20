@@ -2,17 +2,16 @@ import * as React from 'react';
 import { useNavigate } from '../hooks';
 import { useRoute, useRouter } from '../contexts';
 import { mergePaths } from '../utils';
-import { RouteState } from '../types';
+import { NavigateConfig } from '../types';
 
 interface StylesProps {
   isActive: boolean;
 }
 
 interface LinkProps
-  extends Omit<React.ComponentPropsWithRef<'a'>, 'style' | 'className'> {
+  extends Omit<React.ComponentPropsWithRef<'a'>, 'style' | 'className'>,
+    NavigateConfig {
   path: string;
-  replace?: boolean;
-  state?: RouteState;
   style?: React.CSSProperties | ((props: StylesProps) => React.CSSProperties);
   className?: string | ((props: StylesProps) => string);
 }

@@ -9,3 +9,8 @@ export interface RoutePropsWithParent extends RouteProps {
 }
 
 export type RouteState = PopStateEventInit['state'];
+
+export interface NavigateConfig {
+  replace?: boolean;
+  state?: RouteState;
+}
