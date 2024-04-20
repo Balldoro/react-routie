@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { mergePaths, setupListeners } from '../utils';
+import { RouteState } from 'types';
 
 interface State {
   currentPath: string;
   currentPathWithQuery: string;
   search: string;
+  state: RouteState;
 }
 
 export const RouterContext = React.createContext<State | undefined>(undefined);
@@ -13,16 +15,20 @@ interface RouterContextProviderProps {
   children: React.ReactNode;
 }
 
+const createState = (routeState?: RouteState) => ({
+  currentPath: location.pathname,
+  search: location.search,
+  state: routeState,
+});
+
 export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
-  const [currentPath, setCurrentPath] = React.useState(location.pathname);
-  const [search, setSearch] = React.useState(location.search);
+  const [state, setState] = React.useState(createState);
 
   React.useLayoutEffect(() => {
-    const handleRouteChange = () => {
-      setCurrentPath(location.pathname);
-      setSearch(location.search);
+    const handleRouteChange = (e: PopStateEvent) => {
+      setState(createState(e.state));
     };
 
     const unsubscribe = setupListeners(handleRouteChange);
@@ -30,8 +36,8 @@ export const RouterContextProvider = ({
     return unsubscribe;
   }, []);
 
-  const currentPathWithQuery = mergePaths(currentPath, search);
-  const value = { currentPath, currentPathWithQuery, search };
+  const currentPathWithQuery = mergePaths(state.currentPath, state.search);
+  const value = { ...state, currentPathWithQuery };
 
   return (
     <RouterContext.Provider value={value}>{children}</RouterContext.Provider>

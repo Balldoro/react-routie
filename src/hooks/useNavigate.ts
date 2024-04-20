@@ -1,22 +1,19 @@
 import { useRouter } from '../contexts';
+import { NavigateConfig } from '../types';
 import { createRouteChangeEvent } from '../utils';
-
-interface NavigateConfig {
-  replace?: boolean;
-}
 
 export const useNavigate = () => {
   const { currentPathWithQuery } = useRouter();
 
   const navigate = (path: string, config?: NavigateConfig) => {
-    const shouldReplace = config?.replace || currentPathWithQuery === path;
-    const state = { url: path };
+    const { replace, state } = config || {};
+    const shouldReplace = replace || currentPathWithQuery === path;
 
     shouldReplace
       ? history.replaceState(state, '', path)
       : history.pushState(state, '', path);
 
-    createRouteChangeEvent();
+    createRouteChangeEvent(state);
   };
 
   return navigate;
