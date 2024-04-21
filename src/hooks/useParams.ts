@@ -10,17 +10,18 @@ const getCurrentPathParams = (
   currentPath: string,
   { pattern, keys }: ParsedRoutePath,
 ) => {
-  const params: Record<string, string | null> = {};
   const matches = pattern.exec(currentPath);
 
   if (matches) {
-    // Omit first matches index as it's the full path string
-    keys.forEach((key, idx) => (params[key] = matches[idx + 1] || null));
+    // Omit first 'matches' index as it's the full path string
+    const paramsArray = keys.map((key, idx) => ({ [key]: matches[idx + 1] }));
+    return Object.assign({}, ...paramsArray);
   }
-  return params;
 };
 
-export const useParams = () => {
+export const useParams = <
+  Params extends Record<string, string | undefined>,
+>(): Partial<Params> => {
   const { fullRoutePath } = useRoute();
   const { currentPath } = useRouter();
 
