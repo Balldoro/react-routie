@@ -8,7 +8,7 @@ export const NestedRoute = () => {
 
   const nestedRoute = renderMatchingRoute(children, currentPath, fullRoutePath);
 
-  return nestedRoute ? (
+  return currentPath !== fullRoutePath && nestedRoute ? (
     <RouteContextProvider>
       {React.cloneElement(nestedRoute, { parentPath: path })}
     </RouteContextProvider>

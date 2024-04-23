@@ -7,6 +7,7 @@ import {
 import { renderMatchingRoute } from '../utils';
 
 interface RouterProps {
+  basename?: string;
   children: React.ReactNode;
 }
 
@@ -15,7 +16,9 @@ interface RouteRendererProps {
 }
 
 const RouteRenderer = ({ children }: RouteRendererProps) => {
-  const { currentPath } = useRouter();
+  const { currentPath, basename } = useRouter();
+
+  if (!location.pathname.startsWith(basename)) return null;
 
   return (
     <RouteContextProvider>
@@ -24,9 +27,9 @@ const RouteRenderer = ({ children }: RouteRendererProps) => {
   );
 };
 
-export const Router = ({ children }: RouterProps) => {
+export const Router = ({ basename = '', children }: RouterProps) => {
   return (
-    <RouterContextProvider>
+    <RouterContextProvider basename={basename}>
       <RouteRenderer>{children}</RouteRenderer>
     </RouterContextProvider>
   );

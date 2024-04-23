@@ -30,6 +30,9 @@ const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
   return allChildren;
 };
 
+export const cutBasename = (path: string, basename: string) =>
+  path.replace(basename, '');
+
 export const renderMatchingRoute = (
   children: React.ReactNode,
   currentPath: string,
@@ -39,7 +42,10 @@ export const renderMatchingRoute = (
   const flatChildren = flattenRoutes(childrenArray);
 
   const routeToRender = flatChildren.find(({ props }) =>
-    findRoute(mergePaths(parentPath, props.path), clearSlashUrl(currentPath)),
+    findRoute(
+      mergePaths(parentPath, props.path),
+      clearSlashUrl(currentPath || '/'),
+    ),
   );
 
   const routeParentPath = routeToRender?.props.parentPath;
