@@ -2,7 +2,7 @@
 
 React Routie is a tiny client-side routing library for React
 
-![npm](https://img.shields.io/npm/v/react-routie?style=for-the-badge&color=green)
+[![npm](https://img.shields.io/npm/v/react-routie?style=for-the-badge&color=green)](https://www.npmjs.com/package/react-routie)
 
 ## Installation
 
