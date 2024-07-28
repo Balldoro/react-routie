@@ -3,73 +3,77 @@ import { parse } from 'regexparam';
 import { RoutePropsWithParent } from '../types';
 import { Route } from '../components/Route';
 
-const flattenRoutes = (children: React.ReactNode[], parentPath = '') => {
-  const allChildren: React.ReactElement<RoutePropsWithParent>[] = [];
+const findRoute = (path: string, currentPath: string, loose = false) =>
+  parse(path, loose).pattern.exec(removeTrailingSlash(currentPath));
 
-  for (let i = 0, length = children.length; i < length; i++) {
-    const item = children[i];
-    if (React.isValidElement<RoutePropsWithParent>(item)) {
-      handleIncorrectRouteType(item.type);
+const removeTrailingSlash = (path: string) =>
+  path === '/' ? path : path.replace(/\/$/, '');
 
-      const { path, children: nestedChildren } = item.props;
-      const fullPath = mergePaths(parentPath, path);
+export const mergePaths = (...paths: string[]) => paths.join('');
 
-      if (item.type === Route) {
-        allChildren.push(
-          React.cloneElement(item, { path: fullPath, parentPath }),
+const throwOnInvalidChildType = (type: React.ReactElement['type']) => {
+  if (type !== Route && type !== React.Fragment) {
+    throw new Error(
+      `Oops! ${type} element detected! Only Route components are allowed as Router and Route children`,
+    );
+  }
+};
+
+const flattenChildren = (children: React.ReactNode[], parentPath = '') => {
+  const flatChildren: React.ReactElement<RoutePropsWithParent>[] = [];
+
+  children.forEach((child) => {
+    if (React.isValidElement<RoutePropsWithParent>(child)) {
+      throwOnInvalidChildType(child.type);
+
+      const { path, children: nestedChildren } = child.props;
+
+      if (child.type === Route) {
+        const fullPath = mergePaths(parentPath, path);
+        flatChildren.push(
+          React.cloneElement(child, { path: fullPath, parentPath }),
         );
       }
 
       if (nestedChildren) {
         // Empty array casting to overwrite infered never[] type
-        const childrenArray = ([] as React.ReactNode[]).concat(nestedChildren);
-        allChildren.push(...flattenRoutes(childrenArray, path));
+        const nestedChildrenArray = ([] as React.ReactNode[]).concat(
+          nestedChildren,
+        );
+        flatChildren.push(...flattenChildren(nestedChildrenArray, path));
       }
     }
-  }
-  return allChildren;
+  });
+
+  return flatChildren;
 };
 
 export const renderMatchingRoute = (
-  children: React.ReactNode,
+  routes: React.ReactNode,
   currentPath: string,
-  parentPath = '',
+  routesParentPath = '',
 ) => {
-  const childrenArray = React.Children.toArray(children);
-  const flatChildren = flattenRoutes(childrenArray);
+  const flattenedRoutes = flattenChildren(React.Children.toArray(routes));
 
-  const routeToRender = flatChildren.find(({ props }) =>
-    findRoute(mergePaths(parentPath, props.path), clearSlashUrl(currentPath)),
+  const matchingRoute = flattenedRoutes.find(({ props: { path } }) =>
+    findRoute(mergePaths(routesParentPath, path), currentPath),
   );
+  const matchingRouteParentPath = matchingRoute?.props.parentPath;
 
-  const routeParentPath = routeToRender?.props.parentPath;
-
-  return routeParentPath
-    ? flatChildren.find(({ props }) => findRoute(props.path, routeParentPath))
-    : routeToRender;
+  return matchingRouteParentPath
+    ? flattenedRoutes.find(({ props: { path } }) =>
+        findRoute(path, matchingRouteParentPath),
+      )
+    : matchingRoute;
 };
-
-const handleIncorrectRouteType = (elType: React.ReactElement['type']) => {
-  if (elType !== Route && elType !== React.Fragment) {
-    throw new Error(
-      `Oops! ${elType} element detected! Only Route components are allowed as Router and Route children`,
-    );
-  }
-};
-
-const findRoute = (path: string, currentPath: string, loose = false) =>
-  parse(path, loose).pattern.exec(currentPath);
-
-const clearSlashUrl = (path: string) =>
-  path === '/' ? path : path.replace(/\/$/, '');
-
-export const mergePaths = (...paths: string[]) => paths.join('');
 
 export const createRouteChangeEvent = (state?: PopStateEventInit['state']) => {
   dispatchEvent(new PopStateEvent('popstate', { state }));
 };
 
-export const setupListeners = (handleListener: (e: PopStateEvent) => void) => {
+export const setupPopStateListeners = (
+  handleListener: (e: PopStateEvent) => void,
+) => {
   window.addEventListener('popstate', handleListener);
 
   return () => window.removeEventListener('popstate', handleListener);
