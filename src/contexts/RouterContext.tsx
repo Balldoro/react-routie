@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mergePaths, setupListeners } from '../utils';
+import { mergePaths, setupPopStateListeners } from '../utils';
 import { RouteState } from 'types';
 
 interface State {
@@ -31,7 +31,7 @@ export const RouterContextProvider = ({
       setState(createState(e.state));
     };
 
-    const unsubscribe = setupListeners(handleRouteChange);
+    const unsubscribe = setupPopStateListeners(handleRouteChange);
 
     return unsubscribe;
   }, []);
