@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { mergePaths, setupPopStateListeners } from '../utils';
+import {
+  getPathname,
+  getSearch,
+  getState,
+  mergePaths,
+  subscribePopstate,
+} from '../utils';
 import { RouteState } from 'types';
 
 interface State {
@@ -11,33 +17,26 @@ interface State {
 
 export const RouterContext = React.createContext<State | undefined>(undefined);
 
+const usePopstateSubscribe = <T,>(callback: () => T) =>
+  React.useSyncExternalStore(subscribePopstate, callback);
+
 interface RouterContextProviderProps {
   children: React.ReactNode;
 }
 
-const createState = (routeState?: RouteState) => ({
-  currentPath: location.pathname,
-  search: location.search,
-  state: routeState,
-});
-
 export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
-  const [state, setState] = React.useState(createState);
+  const search = usePopstateSubscribe(getSearch);
+  const currentPath = usePopstateSubscribe(getPathname);
+  const state = usePopstateSubscribe(getState);
 
-  React.useLayoutEffect(() => {
-    const handleRouteChange = (e: PopStateEvent) => {
-      setState(createState(e.state));
-    };
+  const currentPathWithQuery = mergePaths(currentPath, search);
 
-    const unsubscribe = setupPopStateListeners(handleRouteChange);
-
-    return unsubscribe;
-  }, []);
-
-  const currentPathWithQuery = mergePaths(state.currentPath, state.search);
-  const value = { ...state, currentPathWithQuery };
+  const value = React.useMemo(
+    () => ({ currentPath, search, state, currentPathWithQuery }),
+    [currentPath, search, state, currentPathWithQuery],
+  );
 
   return (
     <RouterContext.Provider value={value}>{children}</RouterContext.Provider>
