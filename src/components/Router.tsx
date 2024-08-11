@@ -10,9 +10,7 @@ interface RouterProps {
   children: React.ReactNode;
 }
 
-interface RouteRendererProps {
-  children: React.ReactNode;
-}
+interface RouteRendererProps extends RouterProps {}
 
 const RouteRenderer = ({ children }: RouteRendererProps) => {
   const { currentPath } = useRouter();

@@ -5,8 +5,8 @@ import { createRouteChangeEvent } from '../utils';
 export const useNavigate = () => {
   const { currentPathWithQuery } = useRouter();
 
-  const navigate = (path: string, config?: NavigateConfig) => {
-    const { replace, state } = config || {};
+  const navigate = (path: string, config: NavigateConfig = {}) => {
+    const { replace, state } = config;
     const shouldReplace = replace || currentPathWithQuery === path;
 
     shouldReplace
