@@ -16,16 +16,21 @@ interface RouteContextProviderProps {
 export const RouteContextProvider = ({
   children,
 }: RouteContextProviderProps) => {
-  if (React.isValidElement(children)) {
-    const { parentPath, path, children: nestedChildren } = children.props;
-    const fullRoutePath = mergePaths(parentPath, path);
-
-    const value = { children: nestedChildren, fullRoutePath, path };
-
-    return (
-      <RouteContext.Provider value={value}>{children}</RouteContext.Provider>
-    );
+  if (!React.isValidElement(children)) {
+    throw new Error('Route is not a valid element!');
   }
+
+  const { parentPath, path, children: nestedChildren } = children.props;
+  const fullRoutePath = mergePaths(parentPath, path);
+
+  const value = React.useMemo(
+    () => ({ children: nestedChildren, fullRoutePath, path }),
+    [fullRoutePath, nestedChildren, path],
+  );
+
+  return (
+    <RouteContext.Provider value={value}>{children}</RouteContext.Provider>
+  );
 };
 
 export const useRoute = () => {
