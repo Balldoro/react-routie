@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useNavigate } from '../hooks';
-import { useRoute, useRouter } from '../contexts';
+import { useLocation, useNavigate } from '../hooks';
+import { useRoute } from '../contexts';
 import { mergePaths } from '../utils';
 import { NavigateConfig } from '../types';
 
@@ -27,7 +27,7 @@ export const Link = ({
   ...props
 }: LinkProps) => {
   const { fullRoutePath } = useRoute();
-  const { currentPath } = useRouter();
+  const { path: currentPath } = useLocation();
   const navigate = useNavigate();
 
   const fullLinkPath = path.startsWith('/')
@@ -36,8 +36,8 @@ export const Link = ({
 
   const isActive = currentPath === fullLinkPath;
 
-  const getStylesWithProps = <T,>(styles: T) =>
-    styles instanceof Function ? styles({ isActive }) : styles;
+  const parametrizeCSS = <T,>(css: T) =>
+    css instanceof Function ? css({ isActive }) : css;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -49,8 +49,8 @@ export const Link = ({
     <a
       href={path}
       onClick={handleClick}
-      style={getStylesWithProps(style)}
-      className={getStylesWithProps(className)}
+      style={parametrizeCSS(style)}
+      className={parametrizeCSS(className)}
       {...props}
     >
       {children}

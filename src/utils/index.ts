@@ -71,13 +71,15 @@ export const createRouteChangeEvent = (state?: PopStateEventInit['state']) => {
   dispatchEvent(new PopStateEvent('popstate', { state }));
 };
 
-export const setupPopStateListeners = (
-  handleListener: (e: PopStateEvent) => void,
-) => {
-  window.addEventListener('popstate', handleListener);
+export const subscribePopstate = (callback: (e: PopStateEvent) => void) => {
+  window.addEventListener('popstate', callback);
 
-  return () => window.removeEventListener('popstate', handleListener);
+  return () => window.removeEventListener('popstate', callback);
 };
 
 export const getSearchParams = (search: string) =>
   Object.fromEntries(new URLSearchParams(search));
+
+export const getState = () => history.state;
+export const getPathname = () => location.pathname;
+export const getSearch = () => location.search;
