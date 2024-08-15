@@ -74,12 +74,41 @@ export const createRouteChangeEvent = (state?: PopStateEventInit['state']) => {
 export const subscribePopstate = (callback: (e: PopStateEvent) => void) => {
   window.addEventListener('popstate', callback);
 
-  return () => window.removeEventListener('popstate', callback);
+  return () => {
+    window.removeEventListener('popstate', callback);
+  };
 };
 
 export const getSearchParams = (search: string) =>
   Object.fromEntries(new URLSearchParams(search));
 
-export const getState = () => history.state;
-export const getPathname = () => location.pathname;
-export const getSearch = () => location.search;
+const createLocationSnapshot = () => ({
+  currentPath: location.pathname,
+  search: location.search,
+  state: history.state,
+});
+
+export type LocationSnapshot = ReturnType<typeof createLocationSnapshot>;
+
+const areLocationsEqual = (
+  prevSnapshot: LocationSnapshot,
+  nextSnapshot: LocationSnapshot,
+) => {
+  const isEqual = Object.entries(prevSnapshot).every(
+    ([key, value]) => nextSnapshot[key as keyof LocationSnapshot] === value,
+  );
+  return isEqual;
+};
+
+export const getLocationSnapshot = () => {
+  let lastSnapshot = createLocationSnapshot();
+
+  return () => {
+    const currentSnapshot = createLocationSnapshot();
+
+    if (!areLocationsEqual(lastSnapshot, currentSnapshot)) {
+      lastSnapshot = currentSnapshot;
+    }
+    return lastSnapshot;
+  };
+};
