@@ -88,9 +88,9 @@ const createLocationSnapshot = () => ({
   state: history.state,
 });
 
-export type LocationSnapshot = ReturnType<typeof createLocationSnapshot>;
+type LocationSnapshot = ReturnType<typeof createLocationSnapshot>;
 
-const areLocationsEqual = (
+const areLocationSnapshotsEqual = (
   prevSnapshot: LocationSnapshot,
   nextSnapshot: LocationSnapshot,
 ) => {
@@ -106,7 +106,7 @@ export const getLocationSnapshot = () => {
   return () => {
     const currentSnapshot = createLocationSnapshot();
 
-    if (!areLocationsEqual(lastSnapshot, currentSnapshot)) {
+    if (!areLocationSnapshotsEqual(lastSnapshot, currentSnapshot)) {
       lastSnapshot = currentSnapshot;
     }
     return lastSnapshot;
