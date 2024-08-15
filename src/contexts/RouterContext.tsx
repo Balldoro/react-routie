@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  getPathname,
-  getSearch,
-  getState,
-  mergePaths,
-  subscribePopstate,
-} from '../utils';
+import { getLocationSnapshot, mergePaths, subscribePopstate } from '../utils';
 import { RouteState } from 'types';
 
 interface State {
@@ -17,25 +11,24 @@ interface State {
 
 export const RouterContext = React.createContext<State | undefined>(undefined);
 
-const usePopstateSubscribe = <T,>(callback: () => T) =>
-  React.useSyncExternalStore(subscribePopstate, callback);
-
 interface RouterContextProviderProps {
   children: React.ReactNode;
 }
 
+const useLocationSubscription = () =>
+  React.useSyncExternalStore(subscribePopstate, getLocationSnapshot());
+
 export const RouterContextProvider = ({
   children,
 }: RouterContextProviderProps) => {
-  const search = usePopstateSubscribe(getSearch);
-  const currentPath = usePopstateSubscribe(getPathname);
-  const state = usePopstateSubscribe(getState);
+  const location = useLocationSubscription();
+  const { currentPath, search } = location;
 
   const currentPathWithQuery = mergePaths(currentPath, search);
 
   const value = React.useMemo(
-    () => ({ currentPath, search, state, currentPathWithQuery }),
-    [currentPath, search, state, currentPathWithQuery],
+    () => ({ ...location, currentPathWithQuery }),
+    [location, currentPathWithQuery],
   );
 
   return (
